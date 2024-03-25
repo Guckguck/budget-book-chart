@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - name: "8080"
+      port: { { .Values.frontend.SERVICE_PORT } }
+      targetPort: { { .Values.frontend.SERVICE_TARGET_PORT } }

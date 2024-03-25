@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - image: auth:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          env:
+            - name: DB_HOST
+              value: { { .Values.env.DB_HOST } }
+            - name: DB_USER
+              value: { { .Values.env.DB_USER } }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: { { .Values.env.DB_PASSWORD } }
+            - name: DB_NAME
+              value: { { .Values.env.DB_NAME } }
+            - name: DB_PORT
+              value: { { .Values.env.DB_PORT } }
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: budgetbook
+                  key: { { .Values.env.GOOGLE_CLIENT_ID } }
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: budgetbook
+                  key: { { .Values.env.GOOGLE_CLIENT_SECRET } }
+            - name: GOOGLE_CALLBACK_URL
+              value: { { .Values.env.GOOGLE_CALLBACK_URL } }
+            - name: REDIRECT_HOST
+              value: { { .Values.env.REDIRECT_HOST } }
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: budgetbook
+                  key: { { .Values.env.JWT_SECRET } }
+          name: auth
+          ports:
+            - containerPort: { { .Values.auth.DEPLOYMENT_CONTAINER_PORT } }
+              protocol: TCP
+      restartPolicy: Always
