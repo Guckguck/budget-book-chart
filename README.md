@@ -4,7 +4,7 @@
 
 ## Configuring the Helm Charts
 - Remove everything within the template folder
-- Add Chart.yaml and values.yaml to the root directory
+- Check Chart.yaml and values.yaml within the root directory
 - Create a folder for each Microservice (frontend, auth, exspense, statistics) within the template folder
 - Within each Microservice create two files named deployment.yaml and service.yaml
 - Fill these files with needed informations like variables and secrets and reference them
